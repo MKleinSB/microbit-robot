@@ -43,8 +43,12 @@ namespace robot {
         let data = readData(0x1D, 1)[0];
         if (patrol == PatrolLeft) {
             return (data & 0x01) === 0 ? 0 : 1;
+            basic.setLedColor(0xff0000)
+            serial.writeValue("x", (data & 0x01) === 0 ? 0 : 1)
         } else if (patrol == PatrolRight) {
             return (data & 0x02) === 0 ? 0 : 1;
+            basic.setLedColor(0xffff00)
+            serial.writeValue("x", (data & 0x02) === 0 ? 0 : 1)
         } else {
             return data;
         }

@@ -57,7 +57,7 @@ namespace robot {
         constructor() {
             super(0x325e1e40)
             this.lineDetectors = new I2CLineDetector()
-            this.leds = new drivers.WS2812bLEDStrip(DigitalPin.P15, 4)
+            //this.leds = new drivers.WS2812bLEDStrip(DigitalPin.P15, 4)
             this.sonar = new drivers.SR04Sonar(DigitalPin.P2, DigitalPin.P1)
         }
 

@@ -6,7 +6,7 @@ namespace robot {
     const BACKWARD = 1
     const PatrolLeft = 0
     const PatrolRight = 1
-
+    const LINE_STATE_REGISTER = 0x1d
 
     function run(index: number, speed: number): void {
         const buf = pins.createBuffer(3)
@@ -34,21 +34,19 @@ namespace robot {
                 readPatrol(PatrolLeft)
             state[RobotLineDetector.Right] =
                 readPatrol(PatrolRight)
-
+            //            serial.writeLine(state[RobotLineDetector.Left] + " " + state[RobotLineDetector.Right])
         }
-
-
     }
+
+
     export function readPatrol(patrol: number): number {
-        let data = readData(0x1D, 1)[0];
+        let data = readData(LINE_STATE_REGISTER, 1)[0];
         if (patrol == PatrolLeft) {
+            //     serial.writeValue("x", (data & 0x01) === 0 ? 0 : 1)
             return (data & 0x01) === 0 ? 0 : 1;
-            basic.setLedColor(0xff0000)
-            serial.writeValue("x", (data & 0x01) === 0 ? 0 : 1)
         } else if (patrol == PatrolRight) {
+            //     serial.writeValue("x", (data & 0x02) === 0 ? 0 : 1)
             return (data & 0x02) === 0 ? 0 : 1;
-            basic.setLedColor(0xffff00)
-            serial.writeValue("x", (data & 0x02) === 0 ? 0 : 1)
         } else {
             return data;
         }
@@ -68,14 +66,19 @@ namespace robot {
             run(M2_INDEX, right)
         }
 
-        headlightsSetColor(red: number, green: number, blue: number): void {
-            // monochrome leds
-            const on = red > 0xf || green > 0xf || blue > 0xf ? 1 : 0
-            pins.digitalWritePin(DigitalPin.P8, on)
-            pins.digitalWritePin(DigitalPin.P12, on)
+        headlightsSetColor(r: number, g: number, b: number) {
+            writeData([0x18, r]);
+            writeData([0x19, g]);
+            writeData([0x1A, b]);
         }
+        //        lineState() {
+        //            const data = robots.i2cReadRegU8(I2C_ADRESS, LINE_STATE_REGISTER)
+        //            const left = (data & 0x01) == 0x01 ? 1 : 0
+        //            const right = (data & 0x02) == 0x02 ? 1 : 0
+        //            return (left << 0) | (right << 1)
+        //        }
 
-        
+
     }
 
     /**

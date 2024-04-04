@@ -54,8 +54,8 @@
         "microbit.ts": "target:microbit"
     },
     "targetVersions": {
-        "target": "6.0.25",
-        "targetId": "microbit"
+        "target": "6.0.28",
+        "targetId": "calliopemini"
     },
     "supportedTargets": [
         "microbit",

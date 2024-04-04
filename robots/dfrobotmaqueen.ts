@@ -4,6 +4,8 @@ namespace robot {
     const M2_INDEX = 0x02
     const FORWARD = 0
     const BACKWARD = 1
+    const LINE_STATE_REGISTER=0x1D
+    
     function run(index: number, speed: number): void {
         const buf = pins.createBuffer(3)
         const direction = speed > 0 ? FORWARD : BACKWARD
@@ -18,11 +20,6 @@ namespace robot {
     class DFRobotMaqueenRobot extends robots.Robot {
         constructor() {
             super(0x325e1e40)
-            this.lineDetectors = new drivers.DigitalPinLineDetectors(
-                DigitalPin.P13,
-                DigitalPin.P14,
-                false
-            )
             this.leds = new drivers.WS2812bLEDStrip(DigitalPin.P15, 4)
             this.sonar = new drivers.SR04Sonar(DigitalPin.P2, DigitalPin.P1)
         }
@@ -38,6 +35,14 @@ namespace robot {
             pins.digitalWritePin(DigitalPin.P8, on)
             pins.digitalWritePin(DigitalPin.P12, on)
         }
+
+        lineState() {
+            const data = robots.i2cReadRegU8(I2C_ADRESS, LINE_STATE_REGISTER)
+            const left = (data & 0x08) == 0x08 ? 1 : 0
+            const right = (data & 0x02) == 0x02 ? 1 : 0
+            return (left << 0) | (right << 1)
+        }
+
     }
 
     /**

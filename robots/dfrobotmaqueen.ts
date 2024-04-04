@@ -4,8 +4,10 @@ namespace robot {
     const M2_INDEX = 0x02
     const FORWARD = 0
     const BACKWARD = 1
-    const LINE_STATE_REGISTER = 0x1D
-    
+    const PatrolLeft = 0
+    const PatrolRight = 1
+
+
     function run(index: number, speed: number): void {
         const buf = pins.createBuffer(3)
         const direction = speed > 0 ? FORWARD : BACKWARD
@@ -21,11 +23,38 @@ namespace robot {
         return pins.i2cReadBuffer(I2C_ADRESS, len, false);
     }
 
+    function writeData(buf: number[]): void {
+        pins.i2cWriteBuffer(I2C_ADRESS, pins.createBufferFromArray(buf));
+    }
+
+    class I2CLineDetector implements drivers.LineDetectors {
+        start(): void { }
+        lineState(state: number[]): void {
+            state[RobotLineDetector.Left] =
+                readPatrol(PatrolLeft)
+            state[RobotLineDetector.Right] =
+                readPatrol(PatrolRight)
+
+        }
+
+
+    }
+    export function readPatrol(patrol: number): number {
+        let data = readData(0x1D, 1)[0];
+        if (patrol == PatrolLeft) {
+            return (data & 0x01) === 0 ? 0 : 1;
+        } else if (patrol == PatrolRight) {
+            return (data & 0x02) === 0 ? 0 : 1;
+        } else {
+            return data;
+        }
+    }
 
     // https://github.com/DFRobot/pxt-maqueen/blob/master/maqueen.ts
     class DFRobotMaqueenRobot extends robots.Robot {
         constructor() {
             super(0x325e1e40)
+            this.lineDetectors = new I2CLineDetector()
             this.leds = new drivers.WS2812bLEDStrip(DigitalPin.P15, 4)
             this.sonar = new drivers.SR04Sonar(DigitalPin.P2, DigitalPin.P1)
         }
@@ -42,16 +71,7 @@ namespace robot {
             pins.digitalWritePin(DigitalPin.P12, on)
         }
 
-        lineState() {
-            const data = readData(0x1D, 1)[0];
-            const left = (data & 0x01) === 0 ? 0 : 1
-            const right = (data & 0x02) === 0 ? 0 : 1
-            return (left << 0) | (right << 1)
-        }
-
-//            return data;
-    
-
+        
     }
 
     /**

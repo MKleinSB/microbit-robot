@@ -8,7 +8,6 @@
     },
     "files": [
         "main.ts",
-        "main.blocks",
         "README.md",
         "protocol/protocol.ts",
         "i2c.ts",

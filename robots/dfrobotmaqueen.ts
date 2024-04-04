@@ -4,7 +4,7 @@ namespace robot {
     const M2_INDEX = 0x02
     const FORWARD = 0
     const BACKWARD = 1
-    const LINE_STATE_REGISTER=0x1D
+    const LINE_STATE_REGISTER = 0x1D
     
     function run(index: number, speed: number): void {
         const buf = pins.createBuffer(3)
@@ -15,6 +15,12 @@ namespace robot {
         buf[2] = s
         pins.i2cWriteBuffer(I2C_ADRESS, buf)
     }
+
+    function readData(reg: number, len: number): Buffer {
+        pins.i2cWriteNumber(I2C_ADRESS, reg, NumberFormat.UInt8BE);
+        return pins.i2cReadBuffer(I2C_ADRESS, len, false);
+    }
+
 
     // https://github.com/DFRobot/pxt-maqueen/blob/master/maqueen.ts
     class DFRobotMaqueenRobot extends robots.Robot {
@@ -37,11 +43,14 @@ namespace robot {
         }
 
         lineState() {
-            const data = robots.i2cReadRegU8(I2C_ADRESS, LINE_STATE_REGISTER)
-            const left = (data & 0x08) == 0x08 ? 1 : 0
-            const right = (data & 0x02) == 0x02 ? 1 : 0
+            const data = readData(0x1D, 1)[0];
+            const left = (data & 0x01) === 0 ? 0 : 1
+            const right = (data & 0x02) === 0 ? 0 : 1
             return (left << 0) | (right << 1)
         }
+
+//            return data;
+    
 
     }
 

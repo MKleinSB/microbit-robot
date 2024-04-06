@@ -30,27 +30,24 @@ namespace robot {
     class I2CLineDetector implements drivers.LineDetectors {
         start(): void { }
         lineState(state: number[]): void {
+            const v = this.readPatrol()
             state[RobotLineDetector.Left] =
-                readPatrol(PatrolLeft)
+                v & 0x01 ? 0 : 1;
             state[RobotLineDetector.Right] =
-                readPatrol(PatrolRight)
+                v & 0x02 ? 0 : 1;
             //            serial.writeLine(state[RobotLineDetector.Left] + " " + state[RobotLineDetector.Right])
         }
+        private readPatrol() {
+            let data = readData(LINE_STATE_REGISTER, 1)[0];
+
+                return data;
+            }
     }
 
+    
 
-    export function readPatrol(patrol: number): number {
-        let data = readData(LINE_STATE_REGISTER, 1)[0];
-        if (patrol == PatrolLeft) {
-            //     serial.writeValue("x", (data & 0x01) === 0 ? 0 : 1)
-            return (data & 0x01) === 0 ? 0 : 1;
-        } else if (patrol == PatrolRight) {
-            //     serial.writeValue("x", (data & 0x02) === 0 ? 0 : 1)
-            return (data & 0x02) === 0 ? 0 : 1;
-        } else {
-            return data;
-        }
-    }
+
+
 
     // https://github.com/DFRobot/pxt-maqueen/blob/master/maqueen.ts
     class DFRobotMaqueenRobot extends robots.Robot {

@@ -111,8 +111,6 @@ namespace robot {
                 v & TrackbitStateType.Tracking_State_8 ? 1023 : 0
             state[RobotLineDetector.OuterRight] =
                 v & TrackbitStateType.Tracking_State_12 ? 1023 : 0  
-
-            serial.writeLine(state[RobotLineDetector.Left]+" "+state[RobotLineDetector.OuterRight])
         }
 
         private trackbitStateValue() {

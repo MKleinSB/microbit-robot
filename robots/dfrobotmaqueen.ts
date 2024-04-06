@@ -60,11 +60,8 @@ namespace robot {
         constructor(public readonly servo: I2Cservos) { }
         start() { }
         open(aperture: number) {
-            if (aperture > 50) {
-                writeData([0x14, 0]);
-            } else {
-                writeData([0x14, 90]);
-            }
+             writeData([0x14, aperture]);
+
         }
     }
 

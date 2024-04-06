@@ -43,13 +43,22 @@ namespace robot {
         }
     }
 
+    class I2CSonar implements drivers.Sonar {
+        start(): void { }
+        distance(maxCmDistance: number): number {
+        let integer = readData(0x28, 2);
+        let distance = integer[0] << 8 | integer[1];
+        return (distance > 399 || distance < 1) ? -1 : distance;   
+        }
+    }
+
+
     // https://github.com/DFRobot/pxt-maqueen/blob/master/maqueen.ts
     class DFRobotMaqueenRobot extends robots.Robot {
         constructor() {
             super(0x325e1e40)
             this.lineDetectors = new I2CLineDetector()
-
-            this.sonar = new drivers.SR04Sonar(DigitalPin.P2, DigitalPin.P1)
+            this.sonar = new I2CSonar()
         }
 
         motorRun(left: number, right: number): void {
@@ -62,11 +71,17 @@ namespace robot {
             writeData([0x19, g]);
             writeData([0x1A, b]);
         }
+
     }
+ //ultrasonic(unit: DistanceUnit, maxCmDistance = 500): number {
+ //       let integer = readData(0x28, 2);
+ //       let distance = integer[0] << 8 | integer[1];
+ //       return (distance > 399 || distance < 1) ? -1 : distance;
+ //   }
 
     /**
-     * DFRobot Maqueen
+     * Calliope Motionkit2
      */
-    //% fixedInstance block="dfrobot maqueen" whenUsed weight=80
+    //% fixedInstance block="calliope motionkit2" whenUsed weight=80
     export const dfRobotMaqueen = new RobotDriver(new DFRobotMaqueenRobot())
 }

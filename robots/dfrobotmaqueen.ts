@@ -7,6 +7,7 @@ namespace robot {
     const PatrolLeft = 0
     const PatrolRight = 1
     const LINE_STATE_REGISTER = 0x1d
+    let StatePuffer = 0
 
     function run(index: number, speed: number): void {
         const buf = pins.createBuffer(3)
@@ -30,25 +31,15 @@ namespace robot {
     class I2CLineDetector implements drivers.LineDetectors {
         start(): void { }
         lineState(state: number[]): void {
-            state[RobotLineDetector.Left] =
-                readPatrol(PatrolLeft)
-            state[RobotLineDetector.Right] =
-                readPatrol(PatrolRight)
-            //            serial.writeLine(state[RobotLineDetector.Left] + " " + state[RobotLineDetector.Right])
+            const v = this.readPatrol()
+            StatePuffer = (v & 0x01) == 0x01 ? 1023 : 0;
+            state[RobotLineDetector.Right] = (StatePuffer << 0)
+            StatePuffer = (v & 0x02) == 0x02 ? 1023 : 0;
+            state[RobotLineDetector.Left] = (StatePuffer << 1)
         }
-    }
 
-
-    export function readPatrol(patrol: number): number {
-        let data = readData(LINE_STATE_REGISTER, 1)[0];
-        if (patrol == PatrolLeft) {
-            //     serial.writeValue("x", (data & 0x01) === 0 ? 0 : 1)
-            return (data & 0x01) === 0 ? 0 : 1;
-        } else if (patrol == PatrolRight) {
-            //     serial.writeValue("x", (data & 0x02) === 0 ? 0 : 1)
-            return (data & 0x02) === 0 ? 0 : 1;
-        } else {
-            return data;
+        private readPatrol() {
+            return robots.i2cReadRegU8(I2C_ADRESS, LINE_STATE_REGISTER)
         }
     }
 
@@ -57,7 +48,7 @@ namespace robot {
         constructor() {
             super(0x325e1e40)
             this.lineDetectors = new I2CLineDetector()
-            //this.leds = new drivers.WS2812bLEDStrip(DigitalPin.P15, 4)
+
             this.sonar = new drivers.SR04Sonar(DigitalPin.P2, DigitalPin.P1)
         }
 
@@ -71,14 +62,6 @@ namespace robot {
             writeData([0x19, g]);
             writeData([0x1A, b]);
         }
-        //        lineState() {
-        //            const data = robots.i2cReadRegU8(I2C_ADRESS, LINE_STATE_REGISTER)
-        //            const left = (data & 0x01) == 0x01 ? 1 : 0
-        //            const right = (data & 0x02) == 0x02 ? 1 : 0
-        //            return (left << 0) | (right << 1)
-        //        }
-
-
     }
 
     /**

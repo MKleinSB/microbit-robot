@@ -7,6 +7,10 @@ namespace robot {
     const PatrolLeft = 0
     const PatrolRight = 1
     const LINE_STATE_REGISTER = 0x1d
+    const enum I2Cservos {
+        S1=0x01,
+        S2=0x02
+    }
     let StatePuffer = 0
 
     function run(index: number, speed: number): void {
@@ -52,6 +56,28 @@ namespace robot {
         }
     }
 
+    class PwmArm implements drivers.Arm {
+        constructor(public readonly servo: I2Cservos) { }
+        start() { }
+        open(aperture: number) {
+            if (aperture > 50) {
+                writeData([0x14, 0]);
+            } else {
+                writeData([0x14, 90]);
+            }
+        }
+    }
+
+//    export function servoRun(index: Servos, angle: number): void {
+//        if (index == Servos.S1) {
+//            writeData([0x14, angle]);
+//        } else if (index == Servos.S2) {
+//            writeData([0x15, angle]);
+//        } else {
+//            writeData([0x14, angle]);
+//            writeData([0x15, angle]);
+//        }
+//    }
 
     // https://github.com/DFRobot/pxt-maqueen/blob/master/maqueen.ts
     class DFRobotMaqueenRobot extends robots.Robot {
@@ -59,6 +85,7 @@ namespace robot {
             super(0x325e1e40)
             this.lineDetectors = new I2CLineDetector()
             this.sonar = new I2CSonar()
+            this.arms = [new PwmArm(I2Cservos.S1)]
         }
 
         motorRun(left: number, right: number): void {

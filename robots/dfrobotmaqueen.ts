@@ -8,8 +8,8 @@ namespace robot {
     const PatrolRight = 1
     const LINE_STATE_REGISTER = 0x1d
     const enum I2Cservos {
-        S1=0x01,
-        S2=0x02
+        S0 = 0x14,
+        S1 = 0x15
     }
     let StatePuffer = 0
 
@@ -50,9 +50,9 @@ namespace robot {
     class I2CSonar implements drivers.Sonar {
         start(): void { }
         distance(maxCmDistance: number): number {
-        let integer = readData(0x28, 2);
-        let distance = integer[0] << 8 | integer[1];
-        return (distance > 399 || distance < 1) ? -1 : distance;   
+            let integer = readData(0x28, 2);
+            let distance = integer[0] << 8 | integer[1];
+            return (distance > 399 || distance < 1) ? -1 : distance;
         }
     }
 
@@ -60,29 +60,16 @@ namespace robot {
         constructor(public readonly servo: I2Cservos) { }
         start() { }
         open(aperture: number) {
-             writeData([0x14, aperture]);
-
+            writeData([this.servo, aperture])
         }
     }
 
-//    export function servoRun(index: Servos, angle: number): void {
-//        if (index == Servos.S1) {
-//            writeData([0x14, angle]);
-//        } else if (index == Servos.S2) {
-//            writeData([0x15, angle]);
-//        } else {
-//            writeData([0x14, angle]);
-//            writeData([0x15, angle]);
-//        }
-//    }
-
-    // https://github.com/DFRobot/pxt-maqueen/blob/master/maqueen.ts
     class DFRobotMaqueenRobot extends robots.Robot {
         constructor() {
             super(0x325e1e40)
             this.lineDetectors = new I2CLineDetector()
             this.sonar = new I2CSonar()
-            this.arms = [new PwmArm(I2Cservos.S1)]
+            this.arms = [new PwmArm(I2Cservos.S0), new PwmArm(I2Cservos.S1)]
         }
 
         motorRun(left: number, right: number): void {
@@ -97,11 +84,6 @@ namespace robot {
         }
 
     }
- //ultrasonic(unit: DistanceUnit, maxCmDistance = 500): number {
- //       let integer = readData(0x28, 2);
- //       let distance = integer[0] << 8 | integer[1];
- //       return (distance > 399 || distance < 1) ? -1 : distance;
- //   }
 
     /**
      * Calliope Motionkit2

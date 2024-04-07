@@ -61,6 +61,7 @@ namespace robot {
         start() { }
         open(aperture: number) {
             writeData([this.servo, aperture])
+
         }
     }
 
@@ -82,7 +83,6 @@ namespace robot {
             writeData([0x19, g]);
             writeData([0x1A, b]);
         }
-
     }
 
     /**

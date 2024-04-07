@@ -63,39 +63,46 @@ namespace robot {
 
     function handleLineDetected() {
         const d = RobotDriver.instance()
+        let lost = false
         let prev: number[] = []
-        messages.onEvent(messages.RobotEvents.LineAny, robots.RobotCompactCommand.LineState, () => {
+        messages.onEvent(messages.RobotEvents.LineAny, robots.RobotCompactCommand.LineAnyState, () => {
             const robot = d.robot
             const threshold = robot.lineHighThreshold
             const current = d.currentLineState
 
-            if (current.length === prev.length && current.every((v,i) => prev[i] === v))
+            if (!lost && current.length === prev.length && current.every((v,i) => prev[i] === v))
                 return; // unchanged
             
             // TODO refactor this out
             // left, right, middle
-            let msg: robots.RobotCompactCommand =
-                robots.RobotCompactCommand.LineState
+            let msg = robots.RobotCompactCommand.LineState
             if (current[RobotLineDetector.Middle] >= threshold)
                 msg |= robots.RobotLineState.Left | robots.RobotLineState.Right
             else {
                 if (current[RobotLineDetector.Left] >= threshold)
-                    msg |= robots.RobotLineState.Left
+                    msg |= robots.RobotLineState.Right              // Left/Right between RobotLineDetector and RobotLineState swapped
                 if (current[RobotLineDetector.Right] >= threshold)
-                    msg |= robots.RobotLineState.Right
+                    msg |= robots.RobotLineState.Left
             }
             // line lost
+            lost = false
             if (
                 current.every(v => v < threshold) &&
                 prev[RobotLineDetector.Middle] < threshold
             ) {
-                if (prev[RobotLineDetector.Left] >= threshold)
-                    msg = robots.RobotCompactCommand.LineLostLeft
-                else if (prev[RobotLineDetector.Right] >= threshold)
+                if (prev[RobotLineDetector.Left] >= threshold) {
                     msg = robots.RobotCompactCommand.LineLostRight
+                    lost = true
+                }
+                else if (prev[RobotLineDetector.Right] >= threshold) {
+                    msg = robots.RobotCompactCommand.LineLostLeft
+                    lost = true
+                }
             }
+            // TODO: problem here is how are we going to transition to LineNone?
+
             sendCompactCommand(msg)
-            prev = current
+            prev = current // copy not needed as it is done elsewhere
         })
     }
 

@@ -65,7 +65,7 @@ namespace robot {
         }
     }
 
-    class DFRobotMaqueenRobot extends robots.Robot {
+    class KnotechCallibot1Robot extends robots.Robot {
         constructor() {
             super(0x325e1e40)
             this.lineDetectors = new I2CLineDetector()
@@ -86,8 +86,8 @@ namespace robot {
     }
 
     /**
-     * Calliope Motionkit2
+     * Knotech Callibot 1
      */
-    //% fixedInstance block="calliope motionkit2" whenUsed weight=80
-    export const dfRobotMaqueen = new RobotDriver(new DFRobotMaqueenRobot())
+    //% fixedInstance block="knotech callibot 1" whenUsed weight=80
+    export const knotechcallibot = new RobotDriver(new KnotechCallibot1Robot())
 }

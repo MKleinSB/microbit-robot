@@ -1,11 +1,15 @@
 namespace robot {
-    const I2C_ADRESS = 0x10
+    // Knotech Callibot1
+    const I2C_ADRESS = 0x10 //remove for c2
     const M1_INDEX = 0
     const M2_INDEX = 0x02
     const FORWARD = 0
     const BACKWARD = 1
     const PatrolLeft = 0
     const PatrolRight = 1
+    let c2Initialized = 0;
+    let c2IsBot2 = 0;
+    let c2LedState = 0;
     const LINE_STATE_REGISTER = 0x1d
     const enum I2Cservos {
         S0 = 0x14,
@@ -13,14 +17,37 @@ namespace robot {
     }
     let StatePuffer = 0
 
-    function run(index: number, speed: number): void {
-        const buf = pins.createBuffer(3)
-        const direction = speed > 0 ? FORWARD : BACKWARD
-        const s = Math.round(Math.map(Math.abs(speed), 0, 100, 0, 255))
-        buf[0] = index
-        buf[1] = direction
-        buf[2] = s
-        pins.i2cWriteBuffer(I2C_ADRESS, buf)
+    export function init() {
+        if (c2Initialized != 1) {
+            c2Initialized = 1;
+            let buffer = pins.i2cReadBuffer(0x21, 1);
+            if ((buffer[0] & 0x80) != 0) { // Check if it's a CalliBot2
+                c2IsBot2 = 1;
+                //            setRgbLed(C2RgbLed.All, 0, 0, 0);
+            }
+            else {
+                //            setRgbLed1(C2RgbLed.All, 0, 0)
+            }
+            writeMotor(2, 0); //beide Motoren Stopp
+        }
+        return c2IsBot2
+    }
+
+    function writeMotor(nr: number, speed: number) {
+        let direction = 0 //vorwärts
+        init()
+        if (speed < 0) { direction = 1 } //rückwärts
+        switch (nr) {
+            case 0: //links
+                pins.i2cWriteBuffer(0x20, Buffer.fromArray([0x00, direction, Math.abs(speed)]))
+                break
+            case 2: //beide
+                pins.i2cWriteBuffer(0x20, Buffer.fromArray([0x00, direction, Math.abs(speed), direction, Math.abs(speed)]))
+                break
+            case 1: //rechts
+                pins.i2cWriteBuffer(0x20, Buffer.fromArray([0x02, direction, Math.abs(speed)]))
+                break
+        }
     }
 
     function readData(reg: number, len: number): Buffer {
@@ -43,7 +70,7 @@ namespace robot {
         }
 
         private readPatrol() {
-            return robots.i2cReadRegU8(I2C_ADRESS, LINE_STATE_REGISTER)
+            return robots.i2cReadRegU8(0x21, 1)
         }
     }
 
@@ -74,8 +101,9 @@ namespace robot {
         }
 
         motorRun(left: number, right: number): void {
-            run(M1_INDEX, left)
-            run(M2_INDEX, right)
+            writeMotor(0, left);
+            writeMotor(1, right);
+            //    run(M2_INDEX, right)
         }
 
         headlightsSetColor(r: number, g: number, b: number) {

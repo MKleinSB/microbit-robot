@@ -10,7 +10,7 @@ namespace robot {
     let c2Initialized = 0;
     let c2IsBot2 = 0;
     let c2LedState = 0;
-    const LINE_STATE_REGISTER = 0x1d
+    //  const LINE_STATE_REGISTER = 0x1d
     const enum I2Cservos {
         S0 = 0x14,
         S1 = 0x15
@@ -63,9 +63,13 @@ namespace robot {
         start(): void { }
         lineState(state: number[]): void {
             const v = this.readPatrol()
-            StatePuffer = (v & 0x01) == 0x01 ? 1023 : 0;
+            let toggle = v
+            if (v == 3) { toggle = 0 } // Beim Callibot muss hell und dunkel 
+            if (v == 0) { toggle = 3 } // getauscht werden 
+            serial.writeLine(v + " " + 0x02)
+            StatePuffer = (toggle & 0x01) == 0x01 ? 1023 : 0;
             state[RobotLineDetector.Right] = (StatePuffer << 0)
-            StatePuffer = (v & 0x02) == 0x02 ? 1023 : 0;
+            StatePuffer = (toggle & 0x02) == 0x02 ? 1023 : 0;
             state[RobotLineDetector.Left] = (StatePuffer << 1)
         }
 
@@ -103,7 +107,6 @@ namespace robot {
         motorRun(left: number, right: number): void {
             writeMotor(0, left);
             writeMotor(1, right);
-            //    run(M2_INDEX, right)
         }
 
         headlightsSetColor(r: number, g: number, b: number) {

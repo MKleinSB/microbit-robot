@@ -1,1 +1,9 @@
-
+{
+    "{id:group}Robot": "Roboter",
+    "{id:group}Motors": "Motoren",
+    "{id:group}Accessories": "Zubehör",
+    "{id:group}Lines": "Linien",
+    "{id:group}Obstacles": "Hindernisse",
+    "{id:group}Configuration": "Einstellungen",
+    "robot.motorRun|block": "Robotermotor läuft in Richtung $turnRatio mit Geschwindigkeit $speed \\%"
+}

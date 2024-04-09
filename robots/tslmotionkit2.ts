@@ -65,7 +65,7 @@ namespace robot {
         }
     }
 
-    class DFRobotMaqueenRobot extends robots.Robot {
+    class TSLMotionkitRobot extends robots.Robot {
         constructor() {
             super(0x325e1e40)
             this.lineDetectors = new I2CLineDetector()
@@ -89,5 +89,5 @@ namespace robot {
      * Calliope Motionkit2
      */
     //% fixedInstance block="calliope motionkit2" whenUsed weight=80
-    export const dfRobotMaqueen = new RobotDriver(new DFRobotMaqueenRobot())
+    export const tslMotionkit2 = new RobotDriver(new TSLMotionkitRobot())
 }

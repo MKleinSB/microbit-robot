@@ -1,6 +1,6 @@
 namespace robot {
-    // Knotech Callibot1
-    const I2C_ADRESS = 0x10 //remove for c2
+    // Knotech Callibot 1&2
+    const I2C_ADRESS = 0x20
     let c2Initialized = 0;
     let c2IsBot2 = 0;
     let c2LedState = 0;
@@ -74,8 +74,8 @@ namespace robot {
     class I2CSonar implements drivers.Sonar {
         start(): void { }
         distance(maxCmDistance: number): number {
-            let integer = readData(0x28, 2);
-            let distance = integer[0] << 8 | integer[1];
+            let buffer = pins.i2cReadBuffer(0x21, 3)
+            let distance = (256 * buffer[1] + buffer[2]) / 10
             return (distance > 399 || distance < 1) ? -1 : distance;
         }
     }
@@ -85,11 +85,11 @@ namespace robot {
         start() { }
         open(aperture: number) {
             writeData([this.servo, aperture])
-
         }
     }
 
-    class KnotechCallibot1Robot extends robots.Robot {
+
+    class KnotechCallibotRobot extends robots.Robot {
         constructor() {
             super(0x325e1e40)
             this.lineDetectors = new I2CLineDetector()
@@ -110,8 +110,8 @@ namespace robot {
     }
 
     /**
-     * Knotech Callibot 1
+     * Knotech Callibot 1 & 2
      */
-    //% fixedInstance block="knotech callibot 1" whenUsed weight=80
-    export const knotechcallibot = new RobotDriver(new KnotechCallibot1Robot())
+    //% fixedInstance block="Knotech Callibot" whenUsed weight=80
+    export const knotechcallibot = new RobotDriver(new KnotechCallibotRobot())
 }

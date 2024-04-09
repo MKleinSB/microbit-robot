@@ -1,3 +1,3 @@
-robot.knotechcallibot1.start()
+robot.knotechcallibot.start()
 robot.startCompactRadio()
 robot.startCalibrationButtons()

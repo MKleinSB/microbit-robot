@@ -17,5 +17,6 @@
     "robot.setMotorDrift|block": "Motordrift ändern auf %drift",
     "robot.setAssist|block": "setze Asistenz $assist $enabled",
     "robot.setRadioGroup|block": "setze Funkgruppe auf $group",
+    "robot.playTone|block": "spiele Ton $frequency für $duration",
     "robot.calibrate|block": "Roboter (mit den Knöpfen) kalibrieren"
 }

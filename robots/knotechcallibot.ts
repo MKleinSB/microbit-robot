@@ -60,9 +60,9 @@ namespace robot {
             let toggle = v
             if (v == 3) { toggle = 0 } // Beim Callibot muss hell und dunkel 
             if (v == 0) { toggle = 3 } // getauscht werden 
-            StatePuffer = (toggle & 0x01) == 0x01 ? 1023 : 0;
-            state[RobotLineDetector.Right] = (StatePuffer << 0)
             StatePuffer = (toggle & 0x02) == 0x02 ? 1023 : 0;
+            state[RobotLineDetector.Right] = (StatePuffer << 0)
+            StatePuffer = (toggle & 0x01) == 0x01 ? 1023 : 0;
             state[RobotLineDetector.Left] = (StatePuffer << 1)
         }
 

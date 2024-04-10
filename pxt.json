@@ -1,6 +1,7 @@
 {
     "name": "calliope-robot",
     "version": "2.5.45",
+    "description": "Simulator and Blocks for motionkit and calli:bot",
     "dependencies": {
         "core": "*",
         "radio": "*",

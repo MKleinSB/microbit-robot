@@ -37,9 +37,9 @@ namespace robot {
         lineState(state: number[]): void {
             const v = this.readPatrol()
             StatePuffer = (v & 0x01) == 0x01 ? 1023 : 0;
-            state[RobotLineDetector.Right] = (StatePuffer << 0)
+            state[RobotLineDetector.Left] = (StatePuffer << 0)
             StatePuffer = (v & 0x02) == 0x02 ? 1023 : 0;
-            state[RobotLineDetector.Left] = (StatePuffer << 1)
+            state[RobotLineDetector.Right] = (StatePuffer << 1)
         }
 
         private readPatrol() {

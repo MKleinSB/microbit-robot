@@ -103,9 +103,20 @@ namespace robot {
         }
 
         headlightsSetColor(r: number, g: number, b: number) {
-            writeData([0x18, r]);
-            writeData([0x19, g]);
-            writeData([0x1A, b]);
+                let index = 0;
+                let buffer = pins.createBuffer(5)
+                init()
+            if (c2IsBot2 = 1) {
+                 for (index = 1; index < 5; index++) {
+                        buffer[0] = 0x03;
+                        buffer[1] = index;
+                        buffer[2] = r;
+                        buffer[3] = g;
+                        buffer[4] = b;
+                        pins.i2cWriteBuffer(0x22, buffer);
+                    }
+            }
+            else { basic.showString("RGB LEDs are V2 only!") }
         }
     }
 

@@ -183,7 +183,7 @@ Use micro:code to remote control a robot using this library.
 
 ## Supported Robots
 
-### DFRobot Maqueen V2+ <a id="dfrobot-maq"></a>
+### TinySuperLab MotionKit V2 <a id="tinysuperlab"></a>
 
 ![Photograph of the MotionKit v2](https://tinysuperlab.com/_app/immutable/assets/motionkit_aktion.07fa0bfe.png)
 

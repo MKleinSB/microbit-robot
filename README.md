@@ -1,13 +1,14 @@
-# Micro:bit Robot for MakeCode
+# Robot for MakeCode
 
-This extension contains **blocks for most 2 wheeled robots available for the micro:bit**
+This extension contains **blocks for 2 wheeled robots**
 and **a web simulator**.
-This library is compatible with micro:bit V2 and V1. However, the code space in V1 is limited and you may need to remove some features to fit your program.
+This library is compatible with Calliope mini V3.
 
 > The library is still in beta and is subject to changes.
 
 ![3 micro:bit robots](https://microsoft.github.io/microbit-robot/assets/images/robots.jpg)
 
+-   [TinySupoerLab MotionKit V2](#tinysuperlab)
 -   [DFRobot Maqueen](#dfrobot-maq)
 -   [DFRobot Maqueen Plus](#dfrobot-maq-plus)
 -   [Elecfreaks Cutebot](#cutebot)
@@ -187,6 +188,13 @@ Use micro:code to remote control a robot using this library.
 -   for PXT/calliope
 
 ## Supported Robots
+
+### DFRobot Maqueen V2+ <a id="dfrobot-maq"></a>
+
+![Photograph of the MotionKit v2](https://tinysuperlab.com/_app/immutable/assets/motionkit_aktion.07fa0bfe.png)
+
+-   [Home](https://tinysuperlab.com)
+
 
 ### DFRobot Maqueen V2+ <a id="dfrobot-maq"></a>
 

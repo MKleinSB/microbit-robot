@@ -22,7 +22,7 @@ This library is compatible with Calliope mini V3.
 
 ### Hardware requirements
 
-The firmware is designed for popular rover robots found in the micro:bit ecosystem
+The firmware is designed for popular rover robots
 (and more can be added):
 
 -   2 motors that can be forward, backward, left, right turns. Precise detection of distance is **not** needed.
@@ -38,14 +38,8 @@ The following features are found often those robots:
 
 ## Using this extension
 
--   Open https://makecode.microbit.org
+-   Open https://makecode.calliope.cc
 -   Add this extension to your project by adding url [https://github.com/microsoft/microbit-robot](https://github.com/microsoft/microbit-robot)
-
-## Tutorials
-
--   [Getting started](https://makecode.microbit.org/#tutorial:github:microsoft/microbit-robot/tutorials/getting-started)
--   [Light and Sound](https://makecode.microbit.org/#tutorial:github:microsoft/microbit-robot/tutorials/light-and-sound)
--   [Line follower](https://makecode.microbit.org/#tutorial:github:microsoft/microbit-robot/tutorials/line-follower)
 
 ## Simulator
 

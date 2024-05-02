@@ -86,8 +86,8 @@ namespace robot {
     }
 
     /**
-     * Calliope Motionkit2
+     * TinySuperLab MotionKit V2
      */
-    //% fixedInstance block="calliope motionkit2" whenUsed weight=80
+    //% fixedInstance block="tinysuperlab motionkit v2" whenUsed weight=80
     export const tslMotionkit2 = new RobotDriver(new TSLMotionkitRobot())
 }

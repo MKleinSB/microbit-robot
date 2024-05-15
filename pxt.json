@@ -43,7 +43,7 @@
         "robots/sim.ts",
         "robots/knotechcallibot.ts",
         "robots/tslmotionkit2.ts",
-        "_locales/de/calliope-robot-strings.json",
+        "_locales/de/microbit-robot-strings.json",
         "constants.ts",
         "tutorials/getting-started.md",
         "tutorials/light-and-sound.md",

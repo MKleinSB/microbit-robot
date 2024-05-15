@@ -1,14 +1,13 @@
-# Robot for MakeCode
+# Micro:bit Robot for MakeCode
 
-This extension contains **blocks for 2 wheeled robots**
+This extension contains **blocks for most 2 wheeled robots available for the micro:bit and Calliope mini**
 and **a web simulator**.
-This library is compatible with Calliope mini V3.
+This library is compatible with micro:bit V2, V1 and Calliope mini V3. However, the code space in V1 is limited and you may need to remove some features to fit your program.
 
 > The library is still in beta and is subject to changes.
 
 ![3 micro:bit robots](https://microsoft.github.io/microbit-robot/assets/images/robots.jpg)
 
--   [TinySupoerLab MotionKit V2](#tinysuperlab)
 -   [DFRobot Maqueen](#dfrobot-maq)
 -   [DFRobot Maqueen Plus](#dfrobot-maq-plus)
 -   [Elecfreaks Cutebot](#cutebot)
@@ -18,11 +17,12 @@ This library is compatible with Calliope mini V3.
 -   [KittenBot MiniLFR](#kittenbot-mlfr)
 -   [KittenBot Robotbit](#kittenbot-robotbit)
 -   [KittenBot Nanobit](#kittenbot-nanobit)
+-   [TinySuperLab MotionKit](#tinysuperlab)
 -   [Yahboom Tiny:bit](#yahboom)
 
 ### Hardware requirements
 
-The firmware is designed for popular rover robots
+The firmware is designed for popular rover robots found in the micro:bit and Calliope mini ecosystem
 (and more can be added):
 
 -   2 motors that can be forward, backward, left, right turns. Precise detection of distance is **not** needed.
@@ -38,8 +38,14 @@ The following features are found often those robots:
 
 ## Using this extension
 
--   Open https://makecode.calliope.cc
+-   Open https://makecode.microbit.org or https://makecode.calliope.cc
 -   Add this extension to your project by adding url [https://github.com/microsoft/microbit-robot](https://github.com/microsoft/microbit-robot)
+
+## Tutorials
+
+-   [Getting started](https://makecode.microbit.org/#tutorial:github:microsoft/microbit-robot/tutorials/getting-started)
+-   [Light and Sound](https://makecode.microbit.org/#tutorial:github:microsoft/microbit-robot/tutorials/light-and-sound)
+-   [Line follower](https://makecode.microbit.org/#tutorial:github:microsoft/microbit-robot/tutorials/line-follower)
 
 ## Simulator
 
@@ -183,12 +189,6 @@ Use micro:code to remote control a robot using this library.
 
 ## Supported Robots
 
-### TinySuperLab MotionKit V2 <a id="tinysuperlab"></a>
-
-![Photograph of the MotionKit v2](https://tinysuperlab.com/_app/immutable/assets/motionkit_aktion.07fa0bfe.png)
-
--   [Home](https://tinysuperlab.com)
-
 
 ### DFRobot Maqueen V2+ <a id="dfrobot-maq"></a>
 
@@ -241,6 +241,12 @@ Use micro:code to remote control a robot using this library.
 ![Photo of the Nanobit robot](https://microsoft.github.io/microbit-robot/assets/images/nanobit.webp)
 
 -   [Home](https://www.kittenbot.cc/products/kittenbot-nanobit-with-kb-link-downloader-for-makecode-python-and-arduino-programming)
+
+### TinySuperLab MotionKit V2 <a id="tinysuperlab"></a>
+
+![Photograph of the MotionKit v2](https://microsoft.github.io/microbit-robot/assets/images/motionkitv2.png)
+
+-   [Home](https://tinysuperlab.com)
 
 ### Yahboom Tiny:bit <a id="yahboom"></a>
 

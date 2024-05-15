@@ -12,6 +12,7 @@ This library is compatible with micro:bit V2, V1 and Calliope mini V3. However, 
 -   [DFRobot Maqueen Plus](#dfrobot-maq-plus)
 -   [Elecfreaks Cutebot](#cutebot)
 -   [Elecfreaks Cutebot PRO](#cutebot-pro)
+-   [Forward Educations Smart Vehicle Kit](#fwdedu)
 -   [InkSmith K8](#inksmith-k8)
 -   [KeyStudio KS0426 Mini Smart Robot](#keystudio-mini)
 -   [KittenBot MiniLFR](#kittenbot-mlfr)
@@ -84,20 +85,48 @@ robot.elecfreaksCuteBot.start()
 
 This is the only code that is specific to the robot you are using. The rest of the blocks are the same for all robots.
 
-### Output
+### Motors
 
--   move
+There are two ways to control the motor: **tank** or **steer**.
+
+#### Tank
+
+The `tank` block takes the `left` and `right` motor
+speed between `-100%` and `100%` and an optional `duration` in milliseconds.
+The block will pause for the `duration` before continuing to the next block (it does _not_ stop
+at the end of the duration).
 
 ```blocks
 input.onButtonPressed(Button.A, () => {
-    robot.motorRun(0, 100)
+    robot.motorTank(50, 50, 1000)
 })
 ```
 
-The move block takes a `steering` and `speed`parameters.
-The`steering`controls how much "turn",`speed` controls the throttle on the motors.
+### ~hint
 
--   stop the robot
+#### Hint Why can't we use angles?
+
+Most micro:bit robots do not have sensors to measure the rotation of the wheels,
+so it is not possible to compute rotation angles or distances. The only known value
+is that amount of power sent to the robot.
+
+### ~
+
+### Steer
+
+The `steer` block takes a `steering` and `speed`parameters.
+The`steering`controls how much "turn",`speed` controls the throttle on the motors.
+The optional duration is in milliseconds.
+
+```blocks
+input.onButtonPressed(Button.A, () => {
+    robot.motorSteer(0, 100, 1000)
+})
+```
+
+### Stop
+
+This block stops the robot.
 
 ```blocks
 input.onButtonPressed(Button.B, () => {
@@ -105,13 +134,19 @@ input.onButtonPressed(Button.B, () => {
 })
 ```
 
--   open a claw/arm (some robots support one or more servos)
+### Arms
+
+Some robot support one or more servo attachments. 
+These are called **arms** in the library.
+Open a claw/arm (some robots support one or more servos)
 
 ```blocks
 input.onButtonPressed(Button.B, () => {
     robot.armOpen(0, 50)
 })
 ```
+
+### LEDS and music
 
 -   set LED and headlights color
 
@@ -129,7 +164,7 @@ input.onButtonPressed(Button.A, function () {
 })
 ```
 
-### Input
+### Obstacle detection
 
 -   detect when an obstacle is changing
     and read the current distance (in cm)
@@ -141,12 +176,14 @@ robot.onObstacleDistanceChanged(function () {
 })
 ```
 
+### Line detection
+
 -   detect line changes or read line state
 
 ```blocks
 let left = false
 robot.onLineDetected(function () {
-    left = robot.detectLines(RobotLineDetector.Left)
+    left = robot.detectLine(RobotLineDetector.Left)
 })
 ```
 
@@ -214,6 +251,12 @@ Use micro:code to remote control a robot using this library.
 
 -   [Home](https://shop.elecfreaks.com/products/elecfreaks-smart-cutebot-pro-v2-programming-robot-car-for-micro-bit)
 
+## Forward Education Smart Vehicle Kit <a id="fwdedu"></a>
+
+![Photograph of car made with Smart Vehicle Kit](https://microsoft.github.io/microbit-robot/assets/images/fwdedu.jpg){:class="photo"}
+
+-   [Home](https://forwardedu.com/compare-kits/)
+
 ### InkSmith K8 <a id="inksmith-k8"></a>
 
 ![Photograph of the K8](https://microsoft.github.io/microbit-robot/assets/images/inksmithk8.webp)
@@ -257,6 +300,10 @@ Use micro:code to remote control a robot using this library.
 ## License
 
 MIT
+
+## Acknoledgements
+
+- [Anthony Jacques](https://twitter.com/Syd_Filmore) for a suggestions on the motor block API design.
 
 ## Contributing
 

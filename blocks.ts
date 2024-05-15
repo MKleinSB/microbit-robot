@@ -5,12 +5,13 @@
 //% groups='["Robot", "Motors", "Accessories", "Lines", "Obstacles", "Configuration"]'
 namespace robot {
     /**
-     * Moves the robot.
+     * Steers the robot.
      */
-    //% weight=98
+    //% weight=97
     //% group="Motors"
-    //% block="robot motor run with steering $turnRatio at speed $speed \\%"
-    //% blockid="mbitrobotmotorturn"
+    //% block="robot motor steer $turnRatio at $speed \\% || for $duration ms"
+    //% blockid="mbitrobotmotorsteer"
+    //% expandableArgumentMode="toggle"
     //% speed.defl=100
     //% speed.min=-100
     //% speed.max=100
@@ -18,9 +19,51 @@ namespace robot {
     //% turnRatio.shadow=turnRatioPicker
     //% turnRatio.min=-200
     //% turnRatio.max=200
-    export function motorRun(turnRatio: number, speed: number) {
+    //% duration.shadow=timePicker
+    export function motorSteer(
+        turnRatio: number = 0,
+        speed: number = 100,
+        duration?: number
+    ) {
         const robot = RobotDriver.instance()
-        robot.motorRun(turnRatio, speed)
+        robot.motorSteer(turnRatio, speed, duration)
+    }
+
+    /**
+     * Tanks the robot.
+     */
+    //% weight=98
+    //% group="Motors"
+    //% block="robot motor tank $left \\% $right \\% || for $duration ms"
+    //% expandableArgumentMode="toggle"
+    //% blockid="mbitrobotmotortank"
+    //% left.defl=100
+    //% left.min=-100
+    //% left.max=100
+    //% left.shadow=speedPicker
+    //% right.defl=100
+    //% right.min=-100
+    //% right.max=100
+    //% right.shadow=speedPicker
+    //% duration.shadow=timePicker
+    export function motorTank(
+        left: number = 80,
+        right: number = 80,
+        duration?: number
+    ) {
+        left = clampSpeed(left, 100)
+        right = clampSpeed(right, 100)
+
+        const speed = Math.abs(left) > Math.abs(right) ? left : right
+        let turnRatio: number
+        if (speed === 0) {
+            turnRatio = 0
+        } else {
+            turnRatio = ((left - right) / speed) * 100
+        }
+
+        const robot = RobotDriver.instance()
+        robot.motorSteer(turnRatio, speed, duration)
     }
 
     /**
@@ -32,7 +75,7 @@ namespace robot {
     //% blockid="mbitrobotmotorstop"
     export function motorStop() {
         const robot = RobotDriver.instance()
-        robot.motorRun(0, 0)
+        robot.motorSteer(0, 0)
     }
 
     /**
@@ -156,7 +199,65 @@ namespace robot {
         messages.onEvent(messages.RobotEvents.LineLeftRight, msg, handler)
     }
 
- 
+    /**
+     * Registers an event to run when the left, middle or right detectors
+     * changes state
+     */
+    //% weight=61
+    //% block="robot on line $left $middle $right"
+    //% blockId=microcoderobotondetectlinesleftrightmid
+    //% group="Lines"
+    //% left.shadow=toggleOnOff
+    //% middle.shadow=toggleOnOff
+    //% right.shadow=toggleOnOff
+    export function onLineLeftMiddleRightDetected(
+        left: boolean,
+        middle: boolean,
+        right: boolean,
+        handler: () => void
+    ) {
+        robots.sensorsUsed |= robots.Sensors.LineDetector
+        let msg = robot.robots.RobotCompactCommand.LineLeftRightMiddleState
+        if (left) msg |= 1 << RobotLineDetector.Left
+        if (middle) msg |= 1 << RobotLineDetector.Middle
+        if (right) msg |= 1 << RobotLineDetector.Right
+        messages.onEvent(messages.RobotEvents.LineLeftMiddleRight, msg, handler)
+    }
+
+    /**
+     * Registers an event to run when the outer left, left, right, outerRight detectors
+     * changes state
+     */
+    //% weight=60
+    //% block="robot on line $outerLeft $left $right $outerRight"
+    //% blockId=microcoderobotondetectlinesouterleftleftrightouterright
+    //% group="Lines"
+    //% outerLeft.shadow=toggleOnOff
+    //% right.shadow=toggleOnOff
+    //% left.shadow=toggleOnOff
+    //% outerRight.shadow=toggleOnOff
+    export function onLineOuterLeftLeftOuterRightDetected(
+        outerLeft: boolean,
+        left: boolean,
+        right: boolean,
+        outerRight: boolean,
+        handler: () => void
+    ) {
+        robots.sensorsUsed |= robots.Sensors.LineDetector
+        let msg =
+            robot.robots.RobotCompactCommand
+                .LineOuterLeftLeftRightOuterRightState
+        if (outerLeft) msg |= 1 << RobotLineDetector.OuterLeft
+        if (left) msg |= 1 << RobotLineDetector.Left
+        if (right) msg |= 1 << RobotLineDetector.Right
+        if (outerRight) msg |= 1 << RobotLineDetector.OuterRight
+        messages.onEvent(
+            messages.RobotEvents.LineOuterLeftLeftRightOuterRight,
+            msg,
+            handler
+        )
+    }
+
     /**
      * Sets a value that corrects the ratio of power between the left and the right motor to account for hardware differences.
      */
@@ -215,6 +316,6 @@ namespace robot {
     export function calibrate() {
         robot.motorStop()
         robot.startCalibrationButtons(true)
-        robot.motorRun(0, 80)
+        robot.motorSteer(0, 80)
     }
 }

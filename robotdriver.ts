@@ -26,7 +26,7 @@ namespace robot {
         return r
     }
 
-    function clampSpeed(speed: number, m: number = 100) {
+    export function clampSpeed(speed: number, m: number = 100) {
         return Math.clamp(-m, m, Math.round(speed))
     }
 
@@ -143,7 +143,7 @@ namespace robot {
 
             // stop motors
             this.setColor(0x0000ff)
-            this.motorRun(0, 0)
+            this.motorSteer(0, 0)
             // wake up sensors
             this.sonarDistanceFilter.x = configuration.MAX_SONAR_DISTANCE
             this.readUltrasonicDistance()
@@ -290,8 +290,8 @@ namespace robot {
             const threshold = this.robot.lineHighThreshold
             const s = this.currentLineState
             for (let i = 0; i < 5; ++i) {
-                if (s[i] >= threshold) led.plot(4-i, 4)
-                else led.unplot(4-i, 4)
+                if (s[i] >= threshold) led.plot(4 - i, 4)
+                else led.unplot(4 - i, 4)
             }
         }
 
@@ -347,7 +347,7 @@ namespace robot {
             }
         }
 
-        motorRun(turnRatio: number, speed: number) {
+        motorSteer(turnRatio: number, speed: number, duration?: number) {
             this.start()
             turnRatio = clampSpeed(turnRatio, 200)
             speed = clampSpeed(speed, 100)
@@ -358,6 +358,10 @@ namespace robot {
             if (!(this.assists & RobotAssist.Speed)) {
                 this.currentSpeed = this.targetSpeed
                 this.currentTurnRatio = this.targetTurnRatio
+            }
+
+            if (!isNaN(duration) && duration > 0) {
+                basic.pause(duration)
             }
         }
 
@@ -455,7 +459,10 @@ namespace robot {
         }
 
         private updateTone() {
-            if (this.stopToneMillis && this.stopToneMillis <= control.millis()) {
+            if (
+                this.stopToneMillis &&
+                this.stopToneMillis <= control.millis()
+            ) {
                 pins.analogPitch(0, 0)
                 this.stopToneMillis = 0
             }

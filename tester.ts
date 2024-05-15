@@ -4,12 +4,12 @@ namespace robot.test {
      */
     export function startTestMode() {
         setAssist(RobotAssist.LineFollowing, false)
-
         onLineDetected(function () {
             playTone(600, 50)
         })
         onLineLeftRightDetected(true, true, () => {
             playTone(640, 50)
+            led.toggle(0, 2)
         })
         onObstacleDistanceChanged(function () {
             playTone(768, 50)
@@ -19,11 +19,11 @@ namespace robot.test {
             const d = 1000
             playTone(440, 200)
             setColor(0xff0000)
-            motorRun(200, 100)
+            motorTank(-100, 100)
             pause(d)
             playTone(440, 200)
             setColor(0xff0000)
-            motorRun(-200, 100)
+            motorTank(100, -100)
             pause(d)
             playTone(840, 200)
             setColor(0x000000)
@@ -31,17 +31,16 @@ namespace robot.test {
         })
 
         input.onButtonPressed(Button.B, () => {
-            const d = 1000
-            motorRun(0, 100)
-            pause(d)
-            motorRun(0, 50)
-            pause(d)
-            motorRun(0, 0)
-            pause(d)
-            motorRun(0, -50)
-            pause(d)
-            motorRun(0, -100)
-            pause(d)
+            const d = 600
+
+            motorTank(50, 50, d)
+            motorTank(0, 0, d)
+            motorTank(-50, -50, d)
+            motorStop()
+
+            motorSteer(0, 100, d)
+            motorSteer(0, 0, d)
+            motorSteer(0, -100, d)
             motorStop()
         })
 
@@ -51,25 +50,23 @@ namespace robot.test {
             onLineLeftRightDetected(true, true, () => {
                 console.log(`x x`)
                 last = 0
-                motorRun(0, 100)
+                motorSteer(0, 100)
             })
             onLineLeftRightDetected(false, false, () => {
                 console.log(`o o`)
-                if (last < 0)
-                    motorRun(-200,100)
-                else motorRun(200, 100)
+                if (last < 0) motorSteer(-200, 100)
+                else motorSteer(200, 100)
             })
             onLineLeftRightDetected(true, false, () => {
                 console.log(`x o`)
                 last = -1
-                motorRun(-100, 100)
+                motorSteer(-100, 100)
             })
             onLineLeftRightDetected(false, true, () => {
                 console.log(`o x`)
                 last = 1
-                motorRun(100, 100)
+                motorSteer(100, 100)
             })
-            motorRun(0, 100)
         })
     }
 }

@@ -15,14 +15,10 @@ namespace robot {
         if (c2Initialized != 1) {
             c2Initialized = 1;
             let buffer = pins.i2cReadBuffer(0x21, 1);
-            if ((buffer[0] & 0x80) != 0) { // Check if it's a CalliBot2
+            if ((buffer[0] & 0x80) != 0) { // Check if it's a Callibot2
                 c2IsBot2 = 1;
-                //            setRgbLed(C2RgbLed.All, 0, 0, 0);
             }
-            else {
-                //            setRgbLed1(C2RgbLed.All, 0, 0)
-            }
-            writeMotor(2, 0); //beide Motoren Stopp
+            writeMotor(2, 0); // stop motors
         }
         return c2IsBot2
     }
@@ -32,13 +28,13 @@ namespace robot {
         init()
         if (speed < 0) { direction = 1 } //rückwärts
         switch (nr) {
-            case 0: //links
+            case 0: //left
                 pins.i2cWriteBuffer(0x20, Buffer.fromArray([0x00, direction, Math.abs(speed)]))
                 break
-            case 2: //beide
+            case 2: //both
                 pins.i2cWriteBuffer(0x20, Buffer.fromArray([0x00, direction, Math.abs(speed), direction, Math.abs(speed)]))
                 break
-            case 1: //rechts
+            case 1: //right
                 pins.i2cWriteBuffer(0x20, Buffer.fromArray([0x02, direction, Math.abs(speed)]))
                 break
         }

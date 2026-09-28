@@ -19,4 +19,6 @@
     "robot.setRadioGroup|block": "setze Funkgruppe auf $group",
     "robot.playTone|block": "spiele Ton $frequency für $duration",
     "robot.calibrate|block": "Roboter (mit den Knöpfen) kalibrieren"
+    "robot.motorTank|block": "Robotermotoren links $left \\% rechts $right \\%",
+    "robot.motorSteer|block": "Roboter lenken $steering mit Geschwindigkeit $speed \\%"
 }
